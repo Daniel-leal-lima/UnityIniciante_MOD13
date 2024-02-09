@@ -6,15 +6,57 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] GameObject[] spawnItems;
     [SerializeField] BoxCollider boxCol;
-    public bool canSpawn = true;
+    [SerializeField] GameObject SpawnedItemsContainer;
 
+    public static Transform spawnerContainer;
 
-    private void Start()
+    private bool _canSpawn;
+    public bool CanSpawn
     {
-        StartCoroutine(nameof(SpawnCoroutine));
+        get { return _canSpawn; }
+        set
+        {
+            _canSpawn = value;
+            if (value) StartWave();
+            else EndWave();
+        }
     }
+    public static int itensToSpawn;
+    private static IEnumerator _coroutine;
 
-
+    private void OnEnable()
+    {
+        spawnerContainer = SpawnedItemsContainer.transform;
+    }
+    public void StartWave()
+    {
+        _coroutine = SpawnLogic();
+        itensToSpawn = Random.Range(8, 15);
+        StartCoroutine(_coroutine);
+    }
+    public void EndWave()
+    {
+        StopCoroutine(_coroutine);
+    }
+    IEnumerator SpawnLogic()
+    {
+        while (_canSpawn && itensToSpawn > 0)
+        {
+            float probability = Time.deltaTime * Random.Range(0, 3);
+            if (probability < 3)
+            {
+                Spawn();
+                itensToSpawn--;
+            }
+            yield return new WaitForSeconds(Random.Range(0.5f, 3f));
+        }
+    }
+    //IEnumerator NextWave()
+    //{
+    //    EndWave();
+    //    yield return new WaitForSeconds(6f);
+    //    CanSpawn = true;
+    //}
     public void Spawn()
     {
         int random = Random.Range(0, spawnItems.Length);
@@ -22,20 +64,10 @@ public class Spawner : MonoBehaviour
         float randomX = Random.Range(boxCol.bounds.min.x, boxCol.bounds.max.x);
 
         Vector3 rndPos = new Vector3(randomX, boxCol.transform.position.y, 0f);
-        GameObject spawned = Instantiate(spawnItems[random],rndPos,Quaternion.identity, null);
-        //if (spawned.gameObject.TryGetComponent(out Rigidbody rb))
-        //{
-        //    //rb.AddForce(Vector3.up * 20, ForceMode.Impulse);
-        //}
-    }
-
-
-    IEnumerator SpawnCoroutine()
-    {
-        while (canSpawn)
+        GameObject spawned = Instantiate(spawnItems[random], rndPos, Quaternion.identity, spawnerContainer);
+        if (spawned.gameObject.TryGetComponent(out Rigidbody rb))
         {
-            Spawn();
-            yield return new WaitForSeconds(0.2f);
+            rb.AddForce(Vector3.up * 17, ForceMode.Impulse);
         }
     }
 }
