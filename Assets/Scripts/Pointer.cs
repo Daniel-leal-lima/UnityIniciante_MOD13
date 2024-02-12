@@ -6,6 +6,7 @@ public class Pointer : MonoBehaviour
 {
     [SerializeField] LayerMask layer;
     [SerializeField] GameObject EffectGO;
+    [SerializeField] Camera mainCamera;
     Vector3 oldPos;
     Vector3 direction;
     private void Update()

@@ -7,6 +7,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] GameObject[] spawnItems;
     [SerializeField] BoxCollider boxCol;
     [SerializeField] GameObject SpawnedItemsContainer;
+    [SerializeField] float force;
 
     public static Transform spawnerContainer;
 
@@ -67,7 +68,7 @@ public class Spawner : MonoBehaviour
         GameObject spawned = Instantiate(spawnItems[random], rndPos, Quaternion.identity, spawnerContainer);
         if (spawned.gameObject.TryGetComponent(out Rigidbody rb))
         {
-            rb.AddForce(Vector3.up * 17, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * force, ForceMode.Impulse);
         }
     }
 }
