@@ -8,6 +8,7 @@ public class Crate : MonoBehaviour, IHitable
     int numberOfHitsToDestroy;
     [SerializeField] GameObject fruitPrefab;
     [SerializeField] TextMeshPro[] text;
+    [SerializeField] ParticleSystem psTouch;
     private Rigidbody rb;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class Crate : MonoBehaviour, IHitable
         {
             numberOfHitsToDestroy--;
             UpdateText();
+            psTouch.Play();
         }
         else
         {
