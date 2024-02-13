@@ -6,6 +6,19 @@ public class Fruit : MonoBehaviour, IHitable
 {
     [SerializeField] Rigidbody fruitRigidBody;
     [SerializeField] GameObject splitedPartGO;
+    private GameManager gameManager;
+    private void Awake()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
+    private void Update()
+    {
+        if (transform.parent.position.y < GameManager.limitY)
+        {
+            gameManager.Error();
+            Destroy(transform.parent.gameObject);
+        }
+    }
     public void Slice(Vector3 direction, Vector3 position, float force)
     {
         splitedPartGO.transform.localRotation = transform.localRotation;
