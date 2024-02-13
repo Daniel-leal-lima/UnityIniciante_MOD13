@@ -9,10 +9,10 @@ public class ResetButton : MonoBehaviour
     [SerializeField] Button resetButton;
     void Awake()
     {
-        resetButton.onClick.AddListener(ResetScene);
+        resetButton.onClick.AddListener(OnButtonResetClick);
     }
 
-    private void ResetScene()
+    private void OnButtonResetClick()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
