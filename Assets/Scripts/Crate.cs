@@ -37,7 +37,7 @@ public class Crate : MonoBehaviour, IHitable
         }
         else
         {
-            AudioManager.instance.PlayAudio("Box-Break");
+            AudioManager.instance.PlayAudio(AudioManager.IDBOXBREAK);
             GameObject fruit = Instantiate(fruitPrefab, transform.position, transform.localRotation ,Spawner.spawnerContainer);
             if (fruit.gameObject.TryGetComponent(out Rigidbody rb))
             {

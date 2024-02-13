@@ -34,12 +34,13 @@ public class Spawner : MonoBehaviour
         _coroutine = SpawnLogic();
         itensToSpawn = Random.Range(8, 15);
         StartCoroutine(_coroutine);
+        StartCoroutine(nameof(CheckEndWave));
     }
     public void EndWave()
     {
         StopCoroutine(_coroutine);
     }
-    IEnumerator SpawnLogic()
+    private IEnumerator SpawnLogic()
     {
         while (_canSpawn && itensToSpawn > 0)
         {
@@ -52,13 +53,7 @@ public class Spawner : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.5f, 3f));
         }
     }
-    //IEnumerator NextWave()
-    //{
-    //    EndWave();
-    //    yield return new WaitForSeconds(6f);
-    //    CanSpawn = true;
-    //}
-    public void Spawn()
+    private  void Spawn()
     {
         int random = Random.Range(0, spawnItems.Length);
 
@@ -70,5 +65,13 @@ public class Spawner : MonoBehaviour
         {
             rb.AddForce(Vector3.up * force, ForceMode.Impulse);
         }
+    }
+
+    IEnumerator CheckEndWave()
+    {
+        yield return new WaitUntil(
+            ()=> itensToSpawn == 0 && SpawnedItemsContainer.transform.childCount == 0
+            );
+        GameManager.GameFinished = true;
     }
 }

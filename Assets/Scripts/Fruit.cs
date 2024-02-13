@@ -24,7 +24,7 @@ public class Fruit : MonoBehaviour, IHitable
         splitedPartGO.transform.localRotation = transform.localRotation;
         splitedPartGO.gameObject.SetActive(true);
         this.gameObject.SetActive(false);
-        AudioManager.instance.PlayAudio("Slice");
+        AudioManager.instance.PlayAudio(AudioManager.IDSLICE);
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         splitedPartGO.transform.rotation = Quaternion.Euler(0f, 0f, angle);

@@ -5,17 +5,33 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] Spawner spawner;
+    public int secondsToStart;
     public static int lifes;
     public static int currentWave;
     public static int errorLimit = 3;
     [SerializeField] UIManager uiManager;
     private static int currErrors;
     public static float limitY = -8f;
+    public static bool GameFinished
+    {
+        get { return gameFinished; }
+        set { gameFinished = value;
+            if (value) 
+                uimanagerStatic.EndScreen(currErrors.Equals(errorLimit));
+        }
+    }
+    private static bool gameFinished;
+    private static UIManager uimanagerStatic;
 
     private void Awake()
     {
         uiManager = FindObjectOfType<UIManager>();
-        StartCoroutine(DelayHandler.DelayAction(6f, NextWave));
+        uimanagerStatic = uiManager;
+        IEnumerator counter = uiManager.TextCounter(() =>
+        {
+            NextWave();
+        });
+        StartCoroutine(counter);
     }
 
     void NextWave()
@@ -29,11 +45,13 @@ public class GameManager : MonoBehaviour
     {
         if (currErrors < errorLimit)
         {
-            AudioManager.instance.PlayAudio("Miss");
+            AudioManager.instance.PlayAudio(AudioManager.IDMISS);
             uiManager.AppearImage(currErrors);
             currErrors++;
             return;
         }
+        spawner.CanSpawn = false;
         StopAllCoroutines();
+        GameFinished = true;
     }
 }

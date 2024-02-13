@@ -25,6 +25,8 @@ public class AudioManager : MonoBehaviour
 
     public static string IDBACKGROUNDMUSIC = "BG";
     public const string IDSLICE = "Slice";
+    public const string IDMISS = "Miss";
+    public const string IDBOXBREAK = "Box-Break";
 
 
     private void Awake()
