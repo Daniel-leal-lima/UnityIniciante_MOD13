@@ -12,6 +12,7 @@ public class Pointer : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
+
             Raycast(
                 (hitable) =>
                 {
@@ -21,18 +22,20 @@ public class Pointer : MonoBehaviour
                         fruit.Slice(direction, oldPos, 10f);
                     }
                 });
-        }
-        if (Input.touchCount> 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
-        {
-            Raycast(
-               (hitable) =>
-               {
-                   if (hitable is Crate)
+
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+
+                Raycast(
+                   (hitable) =>
                    {
-                       Crate crate = hitable as Crate;
-                       crate.TakeHit();
-                   }
-               });
+                       if (hitable is Crate)
+                       {
+                           Crate crate = hitable as Crate;
+                           crate.TakeHit();
+                       }
+                   });
+            }
         }
     }
     public void Raycast(System.Action<IHitable> callback)

@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] Spawner spawner;
     public int secondsToStart;
-    public static int lifes;
     public static int currentWave;
     public static int errorLimit = 3;
     [SerializeField] UIManager uiManager;
@@ -53,5 +52,12 @@ public class GameManager : MonoBehaviour
         spawner.CanSpawn = false;
         StopAllCoroutines();
         GameFinished = true;
+    }
+
+    private void OnDisable()
+    {
+        gameFinished = false;
+        currErrors = 0;
+        uimanagerStatic = null;
     }
 }

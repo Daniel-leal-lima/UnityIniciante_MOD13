@@ -53,13 +53,17 @@ public class Spawner : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0.5f, 3f));
         }
     }
-    private  void Spawn()
+    private void Spawn()
     {
         int random = Random.Range(0, spawnItems.Length);
 
-        float randomX = Random.Range(boxCol.bounds.min.x, boxCol.bounds.max.x);
+        //float randomX = Random.Range(boxCol.bounds.min.x, boxCol.bounds.max.x);
 
-        Vector3 rndPos = new Vector3(randomX, boxCol.transform.position.y, 0f);
+        Vector3 randomPoint = new(Random.Range(0f, 1f), Random.Range(0f, 1f));
+        randomPoint.z = 10f; 
+        Vector3 worldPoint = Camera.main.ViewportToWorldPoint(randomPoint);
+
+        Vector3 rndPos = new Vector3(worldPoint.x, boxCol.transform.position.y, 0f);
         GameObject spawned = Instantiate(spawnItems[random], rndPos, Quaternion.identity, spawnerContainer);
         if (spawned.gameObject.TryGetComponent(out Rigidbody rb))
         {
@@ -70,7 +74,7 @@ public class Spawner : MonoBehaviour
     IEnumerator CheckEndWave()
     {
         yield return new WaitUntil(
-            ()=> itensToSpawn == 0 && SpawnedItemsContainer.transform.childCount == 0
+            () => itensToSpawn == 0 && SpawnedItemsContainer.transform.childCount == 0
             );
         GameManager.GameFinished = true;
     }
